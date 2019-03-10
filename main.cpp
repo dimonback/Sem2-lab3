@@ -10,9 +10,10 @@ class Fraction
 {
 private:
     int nom, den, sign,intPart=0;
+    double res;
     
 public:
-    int res;
+    
     Fraction(char*);
     friend Fraction operator / (int, Fraction);
     Fraction(int n=0, int m=1): nom(n), den(m) {};
@@ -54,8 +55,8 @@ void Fraction::GetIntPart()  //выделение целой части дроб
 
 Fraction::operator double()   //перевод дроби в вещественное число типа double для последующего сравнения
 {
-    int sign = (nom<0)?-1:1;
-    double res = (double)sign * (intPart * den + nom) / den;
+     sign = (nom<0)?-1:1;
+     res = (double)sign * (intPart * den + nom) / den;
     return(res);
 }
 
