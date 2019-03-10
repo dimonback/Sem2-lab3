@@ -21,7 +21,7 @@ public:
     void reduce();
 };
 
-Fraction::Fraction(char* s)
+Fraction::Fraction(char* s)    //принимаем и обрабатываем дробь
 {
     char* p = strchr(s,'/');
     den=1;
@@ -33,14 +33,14 @@ Fraction::Fraction(char* s)
     nom = atoi(s);
 }
 
-Fraction Fraction::operator <= (Fraction a)
+Fraction Fraction::operator <= (Fraction a) //оператор, который сравнивает текущую дробь и вторую дробь, которая передается в качестве параметра
 {
     if (double(*this) > double(a))
         return a;
     return *this;
 }
 
-void Fraction::GetIntPart()
+void Fraction::GetIntPart()  //выделение целой части дроби
 {
     if(nom >= den)
     {
@@ -50,20 +50,20 @@ void Fraction::GetIntPart()
 }
 
 
-Fraction::operator double()
+Fraction::operator double()   //перевод дроби в вещественное число типа double для последующего сравнения
 {
     double res = (double)sign * (intPart * den + nom) / den;
     return res;
 }
 
-Fraction::operator char* ()
+Fraction::operator char* () //строка
 {
     static char s[32];
     sprintf(s, "%d/%d", nom, den);
     return s;
 }
 
-void Fraction::reduce()
+void Fraction::reduce() //сокращение дроби
 {
     int gcd;
     gcd = euclide(abs(nom), den);
@@ -72,7 +72,7 @@ void Fraction::reduce()
     return;
 }
 
-int euclide(int n, int m)
+int euclide(int n, int m) //алгоритм Евклида, необходимый для сокращения дроби
 {
     int r = 1;
     while (n != 0)
