@@ -14,8 +14,9 @@ private:
 public:
     int res;
     Fraction(char*);
+    friend Fraction operator / (int, Fraction);
     Fraction(int n=0, int m=1): nom(n), den(m) {};
-    Fraction operator <= (Fraction const);
+    bool operator <= (Fraction);
     operator char*();
     operator double();
     void GetIntPart();
@@ -34,11 +35,11 @@ Fraction::Fraction(char* s)    //принимаем и обрабатываем 
     nom = atoi(s);
 }
 
-Fraction Fraction::operator <= (Fraction a) //оператор, который сравнивает текущую дробь и вторую дробь, которая передается в качестве параметра
+bool Fraction::operator <= (Fraction a)
 {
-    if ((*this).res > (a).res)
-        return(a);
-    return(*this);
+    if (double(*this) > double(a))
+        return false;
+    return true;
 }
 
 void Fraction::GetIntPart()  //выделение целой части дроби
@@ -97,12 +98,15 @@ int main(int argc,char* argv[])
     cin >> tempstr2;
     Fraction x1(tempstr1);
     Fraction x2(tempstr2);
+    a=x1;
+    b=x2;
     x1.reduce();
     x2.reduce();
     x1.GetIntPart();
     x2.GetIntPart();
-    a=(double)x1;
-    b=(double)x2;
-    y=(a<=b);
-    cout << (char*)y <<endl;
+    
+    if (x1<=x2)
+        cout << (char*)a <<endl;
+    else
+        cout << (char*)b <<endl;
 }
