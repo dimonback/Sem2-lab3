@@ -9,15 +9,16 @@ int euclide(int, int);
 class Fraction
 {
 private:
-    int nom, den, sign, intPart;
-    void GetIntPart();
+    int nom, den, sign,intPart=0;
+    
 public:
+    int res;
     Fraction(char*);
-    friend Fraction operator / (int, Fraction);
     Fraction(int n=0, int m=1): nom(n), den(m) {};
     Fraction operator <= (Fraction const);
     operator char*();
     operator double();
+    void GetIntPart();
     void reduce();
 };
 
@@ -35,9 +36,9 @@ Fraction::Fraction(char* s)    //принимаем и обрабатываем 
 
 Fraction Fraction::operator <= (Fraction a) //оператор, который сравнивает текущую дробь и вторую дробь, которая передается в качестве параметра
 {
-    if (double(*this) > double(a))
-        return a;
-    return *this;
+    if ((*this).res > (a).res)
+        return(a);
+    return(*this);
 }
 
 void Fraction::GetIntPart()  //выделение целой части дроби
@@ -52,8 +53,9 @@ void Fraction::GetIntPart()  //выделение целой части дроб
 
 Fraction::operator double()   //перевод дроби в вещественное число типа double для последующего сравнения
 {
+    int sign = (nom<0)?-1:1;
     double res = (double)sign * (intPart * den + nom) / den;
-    return res;
+    return(res);
 }
 
 Fraction::operator char* () //строка
@@ -87,13 +89,20 @@ int euclide(int n, int m) //алгоритм Евклида, необходим�
 
 int main(int argc,char* argv[])
 {
-    Fraction y;
-    Fraction x1(argv[1]);
-    Fraction x2(argv[2]);
+    Fraction y,a,b;
+    char tempstr1[32], tempstr2[32];
+    //Fraction x1(argv[1]);
+    //Fraction x2(argv[2]);
+    cin >> tempstr1;
+    cin >> tempstr2;
+    Fraction x1(tempstr1);
+    Fraction x2(tempstr2);
     x1.reduce();
     x2.reduce();
-    x1=double(x1);
-    x2=double(x2);
-    y=(x1<=x2);
+    x1.GetIntPart();
+    x2.GetIntPart();
+    a=(double)x1;
+    b=(double)x2;
+    y=(a<=b);
     cout << (char*)y <<endl;
 }
