@@ -9,29 +9,34 @@ int euclide(int, int);
 class Fraction
 {
 private:
-    int nom, den, sign,intPart=0;
+    int nom, den, sign,intPart;
     double res;
     
 public:
     
     Fraction(char*);
     friend Fraction operator / (int, Fraction);
-    Fraction(int n=0, int m=1): nom(n), den(m) {};
+    Fraction(int n=0, int m=1): nom(n), den(m) {intPart=0};
     bool operator <= (Fraction);
     operator char*();
     operator double();
-    void GetIntPart();
     void reduce();
 };
 
 Fraction::Fraction(char* s)    //принимаем и обрабатываем дробь
 {
+    intPart=0;
     char* p = strchr(s,'/');
     den=1;
     if(p!=NULL)
     {
         *p++ = '\0';
         den = atoi(p);
+        if (den==0)
+        {
+            cout<< "Деление на ноль" << endl;
+            exit(-1);
+        }
     }
     nom = atoi(s);
 }
@@ -43,20 +48,15 @@ bool Fraction::operator <= (Fraction a)
     return true;
 }
 
-void Fraction::GetIntPart()  //выделение целой части дроби
-{
-    if(nom >= den)
-    {
-        intPart += (nom / den);
-        nom %= den;
-    }
-}
-
-
 Fraction::operator double()   //перевод дроби в вещественное число типа double для последующего сравнения
 {
      sign = (nom<0)?-1:1;
-     res = (double)sign * (intPart * den + nom) / den;
+    if(fabs(nom) >= den)
+    {
+        intPart += fabs(nom / den);
+        nom %= den;
+    }
+     res = (double)sign * (intPart * den + fabs(nom)) / den;
     return(res);
 }
 
@@ -91,23 +91,18 @@ int euclide(int n, int m) //алгоритм Евклида, необходим�
 
 int main(int argc,char* argv[])
 {
-    Fraction y,a,b;
-    char tempstr1[32], tempstr2[32];
-    //Fraction x1(argv[1]);
-    //Fraction x2(argv[2]);
-    cin >> tempstr1;
-    cin >> tempstr2;
-    Fraction x1(tempstr1);
-    Fraction x2(tempstr2);
-    a=x1;
-    b=x2;
+    //char tempstr1[32], tempstr2[32];
+    Fraction x1(argv[1]);
+    Fraction x2(argv[2]);
+    //cin >> tempstr1;
+    //cin >> tempstr2;
+    //Fraction x1(tempstr1);
+    //Fraction x2(tempstr2);
+    
     x1.reduce();
     x2.reduce();
-    x1.GetIntPart();
-    x2.GetIntPart();
-    
     if (x1<=x2)
-        cout << (char*)a <<endl;
+        cout << (char*)x1 <<endl;
     else
-        cout << (char*)b <<endl;
+        cout << (char*)x2 <<endl;
 }
